@@ -28,6 +28,10 @@ a, ul, li {
     float: left;
 }
 
+.navigation-container .navigation li a {
+    color: #777777;
+}
+
 .navigation-container .navigation li a:hover {
     color: #fff !important;
 }
@@ -107,4 +111,5 @@ a, ul, li {
     float: left;
     width: auto;
     margin-right: 20px;
+    height: 200px;
 }
