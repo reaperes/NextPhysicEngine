@@ -28,14 +28,14 @@
 
     // default value
     var DefaultValue = function () {
-      this.beforeNumber = 3;
-      this.number = 3;
+      this.beforeNumber = 4;
+      this.number = 4;
       this.gravity = 9.8;
-      this.k = 5000000;
-      this.mu = 0;
+      this.k = 10000000;
       this.angle1 = 0;
       this.angle2 = 0;
-      this.angle3 = 45;
+      this.angle3 = 0;
+      this.angle4 = 45;
     };
 
     window.onload = function () {
@@ -71,15 +71,6 @@
         engine.ready();
       });
 
-      var muFolder = gui.addFolder('mu (N s / m)');
-      muFolder.open();
-      var mu = muFolder.add(defaultValue, 'mu');
-      mu.onFinishChange(function (value) {
-        engine.stop();
-        pendulumCollision.setMu(Math.round(value));
-        engine.ready();
-      });
-
       var angles = [];
       var angleFolder = gui.addFolder('초기 각도 (degree)');
       angleFolder.open();
@@ -109,6 +100,12 @@
       angles[2].onFinishChange(function (value) {
         engine.stop();
         pendulumCollision.setAngleByIndex(value, 2);
+        engine.ready();
+      });
+      angles[3] = angleFolder.add(defaultValue, 'angle4');
+      angles[3].onFinishChange(function (value) {
+        engine.stop();
+        pendulumCollision.setAngleByIndex(value, 3);
         engine.ready();
       });
 

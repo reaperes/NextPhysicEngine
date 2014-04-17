@@ -33,8 +33,9 @@
     var DefaultValue = function () {
       this.gravity = 9.8;
       this.mass = 1;
+      this.mu = 0;
       this.angle = 45;
-      this.velocity = 70;
+      this.velocity = 60;
     };
 
     window.onload = function () {
@@ -57,6 +58,15 @@
       mass.onChange(function (value) {
         engine.stop();
         parabolicMotion.setMass(value);
+        engine.ready();
+      });
+
+      var muFolder = gui.addFolder('Mu');
+      muFolder.open();
+      var mu = muFolder.add(defaultValue, 'mu');
+      mu.onChange(function (value) {
+        engine.stop();
+        parabolicMotion.setMu(value);
         engine.ready();
       });
 

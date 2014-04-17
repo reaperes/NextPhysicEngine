@@ -29,8 +29,9 @@
     engine.ready();
 
     var DefaultValue = function () {
-      this.slow = 3;
+      this.slow = 7;
       this.factor = 30;
+      this.dampingFactor = 1;
     }
 
     window.onload = function () {
@@ -53,6 +54,15 @@
       augmentedFactor.onFinishChange(function (value) {
         engine.stop();
         kepler.setAugmentedFactor(value);
+        engine.ready();
+      });
+
+      var dampingFactorFolder = gui.addFolder('DampingFactor');
+      dampingFactorFolder.open();
+      var dampingFactor = dampingFactorFolder.add(defaultValue, 'dampingFactor');
+      dampingFactor.onFinishChange(function (value) {
+        engine.stop();
+        kepler.setDampingFactor(value);
         engine.ready();
       });
     }
