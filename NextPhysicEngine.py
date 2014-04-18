@@ -40,6 +40,10 @@ def simulation6():
 def simulation7():
     return render_template('07_rotation_motion.html')
 
+@app.route('/07plus_rotation_motion')
+def simulation7plus():
+    return render_template('07plus_rotation_motion.html')
+
 @app.route('/08_kepler_motion')
 def simulation8():
     return render_template('08_kepler_motion.html')
