@@ -14,7 +14,6 @@ NPEngine = function(canvas) {
     canvas = c;
   }
 
-
   var that = this;
   this.keyHandler = function(e) {
     if (e.keyCode != 13) {
@@ -2403,7 +2402,7 @@ NPEngine.RotationMotionPlus = function() {
 
   this.deltaTime = 0.0005;
 
-  this.ballMass = 1.2;        // kg
+  this.ballMass = 1;        // kg
   this.gravity = 9.8;         // m/s^2
   this.blockMass = 50;        // kg
   this.k = 1000000;           // N/m
