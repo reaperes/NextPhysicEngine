@@ -14,6 +14,7 @@ NPEngine = function(canvas) {
     canvas = c;
   }
 
+
   var that = this;
   this.keyHandler = function(e) {
     if (e.keyCode != 13) {
