@@ -5,50 +5,53 @@
   <title>NHN NEXT Physics engine (mini)</title>
   <link rel="stylesheet" href="../static/css/reset.min.css">
   <link rel="stylesheet" href="../static/css/index.css">
-  <script src="http://www.google.com/jsapi"></script>
-  <script>
-   google.load( "webfont", "1" );
-   google.setOnLoadCallback(function() {
-    WebFont.load({ custom: {
-     families: [ "NanumGothic" ],
-     urls: [ "http://fontface.kr/NanumGothic/css" ]
-    }});
-   });
-  </script>
-  <script type="text/javascript" src="../static/js/index.js"></script>
 </head>
-<body>
-  <div class="navigation-container">
-    <ul class="navigation">
-      <li><a id="home" href="/index" rel="home">NHN NEXT Physics Engine</a></li>
-      <li class="prev">
-        <a id="prev-link">←</a>
-      </li>
-      <li class="desc">
-        <span id="desc-span">1/8</span>
-        <div id="simulation-list-container">
-          <ul>
-            <li><a href="01_pendulum">1. 진자 운동</a></li>
-            <li><a href="02_spring">2. 용수철 운동</a></li>
-            <li><a href="03_collision2d">3. 2차원 충돌</a></li>
-            <li><a href="04_collision_pendulum">4. 진자 충돌</a></li>
-            <li><a href="04plus_collision_pendulum">4+. 다중 진자 충돌</a></li>
-            <li><a href="05_parabolic_motion">5. 궤적 운동</a></li>
-            <li><a href="06_spring_motion_plus">6. 용수철 충돌 (외력)</a></li>
-            <li><a href="07_rotation_motion">7. 회전체 운동</a></li>
-            <li><a href="07plus_rotation_motion">7+. 회전체 운동 plus</a></li>
-            <li><a href="08_kepler_motion">8. 케플러 운동</a></li>
-          </ul>
-        </div>
-      </li>
-      <li class="next">
-        <a id="next-link">→</a>
-      </li>
-    </ul>
+<body style="background-color: #000000">
+  <section id="npmenu">
+    <article id="npmenu-overview">
+      <header>
+        <h1>NPEngine.js</h1>
+        <h2>NHN NEXT educational physics engine</h2>
+      </header>
+      <a href="#">Overview</a>
+      <a href="https://github.com/reaperes/PhysicsEngine.git">View source code on Github</a>
+    </article>
+    <nav id="npmenu-simulation-list">
+      <a class="hoverable" href="/pendulum">Pendulum</a>
+      <a class="hoverable" href="/spring">Spring</a>
+      <a class="hoverable" href="/collision2d">Collision2d</a>
+      <a class="hoverable" href="/pendulumCollision">Pendulum Collision</a>
+      <a class="hoverable" href="/pendulumCollisionPlus">Pendulum Collision Plus</a>
+      <a class="hoverable" href="/parabolicMotion">Parabolic Motion</a>
+      <a class="hoverable" href="/forcedSpring">Forced Spring</a>
+      <a class="hoverable" href="/rotation">Rotation</a>
+      <a class="hoverable" href="/rotationPlus">Rotation 2</a>
+      <a class="hoverable" href="/kepler">Kepler</a>
+    </nav>
+  </section>
+  <div id='npengine-container'>
+    <div class="hoverable" id="gui-container"></div>
+    <canvas id="canvas" style="background: #000000;"></canvas>
   </div>
-  <div class="container">
-    {% block content %}
-    {% endblock %}
-  </div>
+  <script>
+    (function () {
+      var isFirst = true;
+      var canvas = document.getElementById('canvas');
+
+      window.addEventListener('resize', resizeCanvas, false);
+      function resizeCanvas() {
+        if (isFirst) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          isFirst = false;
+        }
+      }
+      resizeCanvas();
+    })();
+
+    var content = document.getElementById('content');
+  </script>
+  {% block content %}
+  {% endblock %}
 </body>
 </html>

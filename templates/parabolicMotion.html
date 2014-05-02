@@ -1,0 +1,33 @@
+{%  extends 'base.html' %}
+{% block content %}
+  <script type="text/javascript" src="../static/js/npengine.dev.js"></script>
+  <script type="text/javascript" src="../static/js/dat.gui.min.js"></script>
+  <script type="text/javascript">
+    var c = document.getElementById("canvas");
+    var engine = new NPEngine(c);
+    var grid = new NPEngine.QuadrantGrid;
+    var motion = new NPEngine.ParabolicMotion({
+      gravity: 9.8,
+      mu: 0,
+      mass: 1,
+      theta: 45,
+      velocity: 60
+    });
+    engine.setGrid(grid);
+    engine.addDisplayObject(motion);
+    engine.ready();
+
+    // default value
+    var DefaultValue = function () {
+      this.gravity = 9.8;
+      this.mu = 0;
+      this.mass = 1;
+      this.theta = 45;
+      this.velocity = 60;
+    };
+
+    window.onload = function () {
+      ㅈ
+    };
+  </script>
+{% endblock %}

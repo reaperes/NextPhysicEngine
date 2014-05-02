@@ -5,48 +5,45 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/pendulum')
+def pendulum():
+    return render_template('pendulum.html')
 
-@app.route('/01_pendulum')
-def simulation1():
-    return render_template('01_pendulum.html')
+@app.route('/spring')
+def spring():
+    return render_template('spring.html')
 
-@app.route('/02_spring')
-def simulation2():
-    return render_template('02_spring.html')
+@app.route('/collision2d')
+def collision2d():
+    return render_template('collision2d.html')
 
-@app.route('/03_collision2d')
-def simulation3():
-    return render_template('03_collision2d.html')
+@app.route('/pendulumCollision')
+def pendulumCollision():
+    return render_template('pendulumCollision.html')
 
-@app.route('/04_collision_pendulum')
-def simulation4():
-    return render_template('04_collision_pendulum.html')
+@app.route('/pendulumCollisionPlus')
+def pendulumCollisionPlus():
+    return render_template('pendulumCollisionPlus.html')
 
-@app.route('/04plus_collision_pendulum')
-def simulation4plus():
-    return render_template('04plus_collision_pendulum.html')
+@app.route('/parabolicMotion')
+def parabolicMotion():
+    return render_template('parabolicMotion.html')
 
-@app.route('/05_parabolic_motion')
-def simulation5():
-    return render_template('05_parabolic_motion.html')
+@app.route('/forcedSpring')
+def forcedSpring():
+    return render_template('forcedSpring.html')
 
-@app.route('/06_spring_motion_plus')
-def simulation6():
-    return render_template('06_spring_motion_plus.html')
+@app.route('/rotation')
+def rotation():
+    return render_template('rotation.html')
 
-@app.route('/07_rotation_motion')
-def simulation7():
-    return render_template('07_rotation_motion.html')
+@app.route('/rotationPlus')
+def rotationPlus():
+    return render_template('rotationPlus.html')
 
-@app.route('/07plus_rotation_motion')
-def simulation7plus():
-    return render_template('07plus_rotation_motion.html')
-
-@app.route('/08_kepler_motion')
-def simulation8():
-    return render_template('08_kepler_motion.html')
+@app.route('/kepler')
+def kepler():
+    return render_template('kepler.html')
 
 if __name__ == '__main__':
     app.run()

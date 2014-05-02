@@ -1,60 +1,45 @@
 {%  extends 'base.html' %}
 {% block content %}
-  <script>
-    document.getElementById("prev-link").href="/01_pendulum";
-    document.getElementById("next-link").href="/02_spring";
-    document.getElementById("desc-span").innerHTML="1/8";
-  </script>
-
-  <header id='overview'>
-    <h1>시뮬레이션 1. 진자 운동</h1>
-    <p class="headerDescription">
-      진자 운동을 기술한다.
-    </p>
-  </header>
-  <hr>
-  <div id="engine-container">
-    <div id="gui-container"></div>
-    <canvas id="canvas" width="800px" height="300px"></canvas>
-  </div>
-
   <script type="text/javascript" src="../static/js/npengine.dev.js"></script>
   <script type="text/javascript" src="../static/js/dat.gui.min.js"></script>
   <script type="text/javascript">
     var c = document.getElementById("canvas");
     var engine = new NPEngine(c);
-    var pendulum = new NPEngine.Pendulum;
+    var pendulum = new NPEngine.Pendulum({
+      mass: 10,
+      lineLength: 2,
+      theta0: 30
+    });
     engine.addDisplayObject(pendulum);
     engine.ready();
 
     // default value
     var DefaultValue = function () {
       this.mass = 10;
-      this.length = 2;
+      this.lineLength = 2;
       this.theta0 = 30;
     };
 
     window.onload = function () {
       var defaultValue = new DefaultValue();
       var gui = new dat.GUI({autoPlace: false});
-      var container = document.getElementById("gui-container");
-      container.appendChild(gui.domElement);
+      document.getElementById('gui-container').appendChild(gui.domElement);
 
       var massFolder = gui.addFolder('질량 (Kg)');
       massFolder.open();
       var mass = massFolder.add(defaultValue, 'mass');
       mass.onChange(function (value) {
         engine.stop();
-        pendulum.setMass(Math.round(value));
+        pendulum.setVariables({mass: value});
         engine.ready();
       });
 
       var lengthFolder = gui.addFolder('선 길이 (m)');
       lengthFolder.open();
-      var length = lengthFolder.add(defaultValue, 'length');
+      var length = lengthFolder.add(defaultValue, 'lineLength');
       length.onChange(function (value) {
         engine.stop();
-        pendulum.setLength(Math.round(value));
+        pendulum.setVariables({lineLength: Math.round(value)});
         engine.ready();
       });
 
@@ -63,7 +48,7 @@
       var theta0 = thetaFolder.add(defaultValue, 'theta0', -90, 90);
       theta0.onChange(function (value) {
         engine.stop();
-        pendulum.setTheta0(Math.round(value));
+        pendulum.setVariables({theta0: Math.round(value)});
         engine.ready();
       });
     };

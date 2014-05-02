@@ -1,115 +1,93 @@
-.wf-active body {
- font-family: 'NanumGothic', sans-serif;
+body {
+    font-family: 'Play', sans-serif;
+    overflow: hidden;
 }
 
-a, ul, li {
-    text-decoration: none;
-    list-style: none;
-}
-
-.navigation-container {
-    background: #000;
-    width: 100%;
-    height: 42px;
-}
-
-.navigation-container .navigation {
-    letter-spacing: 2px;
-    line-height: 42px;
-    list-style: none;
-    color: #777777;
-}
-
-.navigation-container .navigation #home {
-    color: #fff;
-}
-
-.navigation-container .navigation > li {
-    float: left;
-}
-
-.navigation-container .navigation li a {
-    color: #777777;
-}
-
-.navigation-container .navigation li a:hover {
-    color: #fff !important;
-}
-
-.navigation-container .navigation li a:visited {
-    color: #777777;
-}
-
-.navigation-container .navigation>li {
-    padding: 0 18px;
-    text-align: center;
-}
-
-.navigation .desc {
-    width: 86px;
-}
-
-#simulation-list-container {
-    display: block;
-    left: 278px;
+#npmenu {
+    color: rgba(255, 255, 255, 1.0);
+    height: 100%;
     position: fixed;
+    left: 20px;
+    top: 20px;
 }
 
-#simulation-list-container li {
-    width: 100%;
-    height: 38px;
-    line-height: 37px;
-    background: #000;
-    clear: both;
-    padding: 0 24px;
-    text-align: left;
+#npmenu:hover #npmenu-simulation-list a {
+    opacity: 1.0;
 }
 
-#simulation-list-container ul li:hover a {
-    color: #fff;
+#npmenu-overview {
+    background-color: rgba(60,60,60,0.8);
+    padding: 12px 10px;
+    margin-bottom: 2px;
 }
 
-#simulation-list-container li a {
-    color: #777777;
+#npmenu-overview h1 {
+    color: rgba(255, 255, 255, 1.0);
+    font-size: 20px;
+    margin-top: 1px;
+    margin-bottom: 2px;
 }
 
-.navigation li:hover {
-    color: #fff;
+#npmenu-overview h2 {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    margin-bottom: 3px;
 }
 
-.desc span {
-    color: #fff;
+#npmenu-overview a {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    text-decoration: underline;
+    padding: 0 2px;
 }
 
-.desc ul {
-    visibility: hidden;
-    height: 0px;
-}
-
-.desc:hover ul {
-    visibility: visible;
-}
-
-.container {
-    margin: 40px 14px 0px 100px;
-}
-
-.container h1 {
-    color: #3A3A3A;
-    font-size: 38px;
-    margin-bottom: 20px;
-}
-
-.container header p {
-    color: #999999;
-    font-weight: 200;
+#npmenu-simulation-list {
     display: block;
-    line-height: 26px;
 }
+
+#npmenu-simulation-list a {
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 0.2;
+    display: block;
+    line-height: 32px;
+    font-size: 15px;
+    /*border-left: 4px solid #fff;*/
+    padding-left: 10px;
+}
+
+#npmenu-simulation-list a:hover {
+    color: rgba(255, 255, 255, 1);
+    opacity: 1.0;
+}
+
+/* npengine */
 
 #gui-container {
-    float: left;
-    width: auto;
-    margin-right: 20px;
-    height: 200px;
+    opacity: 0.5;
+    position: fixed;
+    display: inline;
+    float: right;
+    right: 0;
+}
+
+#gui-container .title {
+    font-size: 13px;
+}
+
+#gui-container div, input {
+    font-size: 12px;
+}
+
+#gui-container:hover {
+    opacity: 1.0;
+}
+
+#canvas {
+    background-color: #000000;
+    display: inline;
+}
+
+/* transitions */
+.hoverable {
+    -webkit-transition: all 320ms ease-out;
 }

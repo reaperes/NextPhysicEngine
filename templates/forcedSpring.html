@@ -1,0 +1,66 @@
+{%  extends 'base.html' %}
+{% block content %}
+  <script type="text/javascript" src="../static/js/npengine.dev.js"></script>
+  <script type="text/javascript" src="../static/js/dat.gui.min.js"></script>
+  <script type="text/javascript">
+    var c = document.getElementById("canvas");
+    var engine = new NPEngine(c);
+    var grid = new NPEngine.Grid;
+    var motion = new NPEngine.ForcedSpring({
+      k: 100,
+      mu: 0,
+      mass: 2,
+      blockX: 0.1,
+      f0: 20,
+      ww0: 0.5,
+      phase: 3.141592
+    });
+    engine.setGrid(grid);
+    engine.addDisplayObject(motion);
+    engine.ready();
+
+    // default value
+    var DefaultValue = function () {
+      this.k = 100;
+      this.mu = 0;
+      this.mass = 2;
+      this.blockX = 0.1;
+      this.f0 = 20;
+      this.ww0 = 0.5;
+      this.phase = 3.141592;
+    };
+
+    window.onload = function () {
+      var defaultValue = new DefaultValue();
+      var gui = new dat.GUI({autoPlace: false});
+      document.getElementById('gui-container').appendChild(gui.domElement);
+
+      var kFolder = gui.addFolder('탄성 계수 (N/m)');
+      kFolder.open();
+      setController(kFolder, 'k');
+
+      var muFolder = gui.addFolder('마찰 계수 (N s/m)');
+      muFolder.open();
+      setController(muFolder, 'mu');
+
+      var blockFolder = gui.addFolder('블록 설정');
+      blockFolder.open();
+      setController(blockFolder, 'mass');
+      setController(blockFolder, 'blockX');
+      setController(blockFolder, 'f0');
+      setController(blockFolder, 'ww0');
+      setController(blockFolder, 'phase');
+
+      function setController(guiFolder, variable) {
+        var gui = guiFolder.add(defaultValue, variable);
+        gui.onFinishChange(function (value) {
+            var option = {};
+            option[variable.toString()] = value;
+            engine.stop();
+            motion.setVariables(option);
+            engine.ready();
+        });
+      }
+    };
+  </script>
+{% endblock %}

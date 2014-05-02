@@ -1,0 +1,86 @@
+{%  extends 'base.html' %}
+{% block content %}
+  <script type="text/javascript" src="../static/js/npengine.dev.js"></script>
+  <script type="text/javascript" src="../static/js/dat.gui.min.js"></script>
+  <script type="text/javascript">
+    var c = document.getElementById("canvas");
+    var engine = new NPEngine(c);
+    var grid = new NPEngine.Grid;
+    var collision = new NPEngine.Collision2d({
+      k: 10000,
+      mu: 0,
+      ball1X: -3,
+      ball1Y: 0.5,
+      diameter1: 0.4,
+      velocity1_x: 3,
+      velocity1_y: 0,
+      ball2X: 1,
+      ball2Y: 0,
+      diameter2: 0.4,
+      velocity2_x: 0,
+      velocity2_y: 0
+    });
+    engine.setGrid(grid);
+    engine.addDisplayObject(collision);
+    engine.ready();
+
+    // default value
+    var DefaultValue = function () {
+      this.k = 10000;
+      this.mu = 0;
+      this.ball1X = -3;
+      this.ball1Y = 0.5;
+      this.diameter1 = 0.4;
+      this.velocity1_x = 3;
+      this.velocity1_y = 0;
+      this.ball2X = 1;
+      this.ball2Y = 0;
+      this.diameter2 = 0.4;
+      this.velocity2_x = 0;
+      this.velocity2_y = 0;
+    };
+
+    window.onload = function () {
+      var defaultValue = new DefaultValue();
+      var gui = new dat.GUI({autoPlace: false});
+      document.getElementById('gui-container').appendChild(gui.domElement);
+
+      var kFolder = gui.addFolder('탄성 계수 (N/m)');
+      kFolder.open();
+      setController(kFolder, 'k');
+
+      var muFolder = gui.addFolder('마찰 계수 (N s/m)');
+      muFolder.open();
+      setController(muFolder, 'mu');
+
+      var ball1Folder = gui.addFolder('공 1');
+      ball1Folder.open();
+      setController(ball1Folder, 'ball1X');
+      setController(ball1Folder, 'ball1Y');
+      setController(ball1Folder, 'diameter1');
+      setController(ball1Folder, 'velocity1_x');
+      setController(ball1Folder, 'velocity1_y');
+
+      var ball2Folder = gui.addFolder('공 2');
+      ball2Folder.open();
+      setController(ball2Folder, 'ball2X');
+      setController(ball2Folder, 'ball2Y');
+      setController(ball2Folder, 'diameter2');
+      setController(ball2Folder, 'velocity2_x');
+      setController(ball2Folder, 'velocity2_y');
+
+      function setController(guiFolder, variable) {
+        var gui = guiFolder.add(defaultValue, variable);
+        gui.onFinishChange(function (value) {
+          debugger;
+          var option = {};
+          option[variable.toString()] = value;
+
+          engine.stop();
+          collision.setVariables(option);
+          engine.ready();
+        });
+      }
+    };
+  </script>
+{% endblock %}

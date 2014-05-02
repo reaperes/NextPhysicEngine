@@ -1,0 +1,72 @@
+{%  extends 'base.html' %}
+{% block content %}
+  <script type="text/javascript" src="../static/js/npengine.dev.js"></script>
+  <script type="text/javascript" src="../static/js/dat.gui.min.js"></script>
+  <script type="text/javascript">
+    var c = document.getElementById("canvas");
+    var engine = new NPEngine(c);
+    var grid = new NPEngine.RotationPlusGrid;
+    var motion = new NPEngine.RotationMotionPlus({
+      k: 1000000,
+      ballMass: 1.1,
+      ballRadius: 0.1,
+      ballX: 8,
+      ballAngle: 40,
+      ballVelocity: 10,
+      blockMass: 50,
+      blockWidth: 0.3,
+      blockHeight: 2
+    });
+    engine.setGrid(grid);
+    engine.addDisplayObject(motion);
+    engine.ready();
+
+    // default value
+    var DefaultValue = function () {
+      this.k = 1000000;
+      this.ballMass = 1.1;
+      this.ballRadius = 0.1;
+      this.ballX = 8;
+      this.ballAngle = 40;
+      this.ballVelocity = 10;
+      this.blockMass = 50;
+      this.blockWidth = 0.3;
+      this.blockHeight = 2;
+    };
+
+    window.onload = function () {
+      var defaultValue = new DefaultValue();
+      var gui = new dat.GUI({autoPlace: false});
+      document.getElementById('gui-container').appendChild(gui.domElement);
+
+      var kFolder = gui.addFolder('탄성 계수 (N/m)');
+      kFolder.open();
+      setController(kFolder, 'k');
+
+      var ballFolder = gui.addFolder('공 설정');
+      ballFolder.open();
+      setController(ballFolder, 'ballMass');
+      setController(ballFolder, 'ballRadius');
+      setController(ballFolder, 'ballX');
+      setController(ballFolder, 'ballAngle');
+      setController(ballFolder, 'ballVelocity');
+
+      var blockFolder = gui.addFolder('블록 설정');
+      blockFolder.open();
+      setController(blockFolder, 'blockMass');
+      setController(blockFolder, 'blockWidth');
+      setController(blockFolder, 'blockHeight');
+
+      function setController(guiFolder, variable) {
+        var gui = guiFolder.add(defaultValue, variable);
+        gui.onFinishChange(function (value) {
+            var option = {};
+            option[variable.toString()] = value;
+            engine.stop();
+            motion.setVariables(option);
+            engine.ready();
+        });
+      }
+    };
+  </script>
+{% endblock %}

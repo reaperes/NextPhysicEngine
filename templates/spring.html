@@ -1,0 +1,58 @@
+{%  extends 'base.html' %}
+{% block content %}
+  <script type="text/javascript" src="../static/js/npengine.dev.js"></script>
+  <script type="text/javascript" src="../static/js/dat.gui.min.js"></script>
+  <script type="text/javascript">
+    var c = document.getElementById("canvas");
+    var engine = new NPEngine(c);
+    var grid = new NPEngine.Grid;
+    var spring = new NPEngine.Spring({
+      mass: 2,
+      k: 100,
+      mu: 0
+    });
+    engine.setGrid(grid);
+    engine.addDisplayObject(spring);
+    engine.ready();
+
+    // default value
+    var DefaultValue = function () {
+      this.mass = 2;
+      this.k = 100;
+      this.mu = 0;
+    };
+
+    window.onload = function () {
+      var defaultValue = new DefaultValue();
+      var gui = new dat.GUI({autoPlace: false});
+      document.getElementById('gui-container').appendChild(gui.domElement);
+
+      var massFolder = gui.addFolder('질량 (Kg)');
+      massFolder.open();
+      var mass = massFolder.add(defaultValue, 'mass');
+      mass.onFinishChange(function (value) {
+        engine.stop();
+        spring.setVariables({mass: value});
+        engine.ready();
+      });
+
+      var kFolder = gui.addFolder('탄성 계수 (N/m)');
+      kFolder.open();
+      var k = kFolder.add(defaultValue, 'k');
+      k.onFinishChange(function (value) {
+        engine.stop();
+        spring.setVariables({k: value});
+        engine.ready();
+      });
+
+      var muFolder = gui.addFolder('마찰 계수 (N s/m)');
+      muFolder.open();
+      var mu = muFolder.add(defaultValue, 'mu');
+      mu.onFinishChange(function (value) {
+        engine.stop();
+        spring.setVariables({mu: value});
+        engine.ready();
+      });
+    };
+  </script>
+{% endblock %}
