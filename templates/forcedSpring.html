@@ -10,9 +10,9 @@
       k: 100,
       mu: 0,
       mass: 2,
-      blockX: 0.1,
+      blockX0: 0.1,
       f0: 20,
-      ww0: 0.5,
+      frequency: 0.5,
       phase: 3.141592
     });
     engine.setGrid(grid);
@@ -24,9 +24,9 @@
       this.k = 100;
       this.mu = 0;
       this.mass = 2;
-      this.blockX = 0.1;
+      this.blockX0 = 0.1;
       this.f0 = 20;
-      this.ww0 = 0.5;
+      this.frequency = 0.5;
       this.phase = 3.141592;
     };
 
@@ -46,9 +46,9 @@
       var blockFolder = gui.addFolder('블록 설정');
       blockFolder.open();
       setController(blockFolder, 'mass');
-      setController(blockFolder, 'blockX');
+      setController(blockFolder, 'blockX0');
       setController(blockFolder, 'f0');
-      setController(blockFolder, 'ww0');
+      setController(blockFolder, 'frequency');
       setController(blockFolder, 'phase');
 
       function setController(guiFolder, variable) {

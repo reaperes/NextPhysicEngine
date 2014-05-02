@@ -21,9 +21,8 @@
 
     // default value
     var DefaultValue = function () {
-      this.k = 200000;
+{#      this.k = 200000;#}
       this.ballMass = 1.1;
-      this.ballRadius = 0.1;
       this.ballVelocity = 3;
       this.blockMass = 15;
       this.blockWidth = 0.3;
@@ -35,14 +34,13 @@
       var gui = new dat.GUI({autoPlace: false});
       document.getElementById('gui-container').appendChild(gui.domElement);
 
-      var kFolder = gui.addFolder('탄성 계수 (N/m)');
-      kFolder.open();
-      setController(kFolder, 'k');
+{#      var kFolder = gui.addFolder('탄성 계수 (N/m)');#}
+{#      kFolder.close();#}
+{#      setController(kFolder, 'k');#}
 
       var ballFolder = gui.addFolder('공 설정');
       ballFolder.open();
       setController(ballFolder, 'ballMass');
-      setController(ballFolder, 'ballRadius');
       setController(ballFolder, 'ballVelocity');
 
       var blockFolder = gui.addFolder('블록 설정');

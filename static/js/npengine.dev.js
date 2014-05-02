@@ -1066,7 +1066,7 @@ NPEngine.Collision2d = function (options) {
   this.k = options.k !== undefined ? options.k : 10000;             // N/m
   this.mu = options.mu !== undefined ? options.mu : 0;              // N s/m
   this.mass1 = options.mass1 !== undefined ? options.mass1 : 2;     // kg
-  this.mass2 = options.mass1 !== undefined ? options.mass2 : 2;     // kg
+  this.mass2 = options.mass2 !== undefined ? options.mass2 : 2;     // kg
 
   var ball1X = options.ball1X !== undefined ? options.ball1X : -3;  // m
   var ball1Y = options.ball1Y !== undefined ? options.ball1Y : 0.5; // m
@@ -1216,7 +1216,7 @@ NPEngine.Collision2d.prototype.setVariables = function (options) {
   this.k = options.k !== undefined ? options.k : 10000;             // N/m
   this.mu = options.mu !== undefined ? options.mu : 0;              // N s/m
   this.mass1 = options.mass1 !== undefined ? options.mass1 : 2;     // kg
-  this.mass2 = options.mass1 !== undefined ? options.mass2 : 2;     // kg
+  this.mass2 = options.mass2 !== undefined ? options.mass2 : 2;     // kg
 
   var ball1X = options.ball1X !== undefined ? options.ball1X : -3;  // m
   var ball1Y = options.ball1Y !== undefined ? options.ball1Y : 0.5; // m
@@ -1253,14 +1253,14 @@ NPEngine.ForcedSpring = function (options) {
   this.mu = options.mu !== undefined ? options.mu : 0;            // N s/m
 
   this.mass = options.mass !== undefined ? options.mass : 2;      // kg
-  this.block.center.x = options.blockX !== undefined ? options.blockX : 0.1; // m
+  this.block.center.x = options.blockX0 !== undefined ? options.blockX0 : 0.1; // m
   this.block.center.y = 0;    // m/s
   this.f0 = options.f0 !== undefined ? options.f0 : 20;           // N
-  this.ww0 = options.ww0 !== undefined ? options.ww0 : 0.5;       // w / w0
+  this.frequency = options.ww0 !== undefined ? options.ww0 : 0.5;       // w / w0
   this.phase = options.phase !== undefined ? options.phase : 3.141592;  // rad
 
   this.angularVelocity0 = Math.sqrt(this.k/this.mass);
-  this.angularVelocity = this.angularVelocity0*this.ww0;
+  this.angularVelocity = this.angularVelocity0*this.frequency;
   this.gravity = 9.8; // m/s^2
   this.velocity = 0;  // m/s
 };
@@ -1284,7 +1284,7 @@ NPEngine.ForcedSpring.prototype.compute = function () {
   var blockPosX = this.block.center.x;
   var velocity = this.velocity;
   var angularVelocity = this.angularVelocity;
-  var outerForce = -this.f0*Math.sin(angularVelocity*time+this.phase)
+  var outerForce = -this.f0*Math.sin(angularVelocity*time+this.phase);
   var frictionForce = -this.mu*velocity;
   var springForce =  -this.k*blockPosX;
   var acceleration = (outerForce+frictionForce+springForce)/this.mass;
@@ -1294,7 +1294,7 @@ NPEngine.ForcedSpring.prototype.compute = function () {
     time = time + this.deltaTime;
     velocity = velocity+acceleration*this.deltaTime;
     blockPosX = blockPosX+velocity*this.deltaTime;
-    outerForce = -this.f0*Math.sin(angularVelocity*time+this.phase)
+    outerForce = -this.f0*Math.sin(angularVelocity*time+this.phase);
     frictionForce = -this.mu*velocity;
     springForce =  -this.k*blockPosX;
     acceleration = (outerForce+frictionForce+springForce)/this.mass;
@@ -1356,13 +1356,13 @@ NPEngine.ForcedSpring.prototype.setVariables = function(options) {
   this.mu = options.mu !== undefined ? options.mu : 0;            // N s/m
 
   this.mass = options.mass !== undefined ? options.mass : 2;      // kg
-  this.block.center.x = options.blockX !== undefined ? options.blockX : 0.1; // m
+  this.block.center.x = options.blockX0 !== undefined ? options.blockX0 : 0.1; // m
   this.f0 = options.f0 !== undefined ? options.f0 : 20;           // N
-  this.ww0 = options.ww0 !== undefined ? options.ww0 : 0.5;       // w / w0
+  this.frequency = options.ww0 !== undefined ? options.ww0 : 0.5;       // w / w0
   this.phase = options.phase !== undefined ? options.phase : 3.141592;  // rad
 
   this.angularVelocity0 = Math.sqrt(this.k/this.mass);
-  this.angularVelocity = this.angularVelocity0*this.ww0;
+  this.angularVelocity = this.angularVelocity0*this.frequency;
 }
 NPEngine.Kepler = function(options) {
   NPEngine.DisplayObject.call(this);
@@ -1453,15 +1453,15 @@ NPEngine.Kepler.prototype.compute = function () {
   });
 
   for (var i= 1; i<10000; i++) {
-    earthVelocityX = earthVelocityX+earthForceX/this.earthMass*1*24*3600;
-    earthVelocityY = earthVelocityY+earthForceY/this.earthMass*1*24*3600;
-    earthX = earthX+earthVelocityX*1*24*3600;
-    earthY = earthY+earthVelocityY*1*24*3600;
+    earthVelocityX = earthVelocityX+earthForceX/this.earthMass*24*3600;
+    earthVelocityY = earthVelocityY+earthForceY/this.earthMass*24*3600;
+    earthX = earthX+earthVelocityX*24*3600;
+    earthY = earthY+earthVelocityY*24*3600;
 
-    moonVelocityX = moonVelocityX+moonForceX/this.moonMass*1*24*3600;
-    moonVelocityY = moonVelocityY+moonForceY/this.moonMass*1*24*3600;
-    moonX = moonX+moonVelocityX*1*24*3600;
-    moonY = moonY+moonVelocityY*1*24*3600;
+    moonVelocityX = moonVelocityX+moonForceX/this.moonMass*24*3600;
+    moonVelocityY = moonVelocityY+moonForceY/this.moonMass*24*3600;
+    moonX = moonX+moonVelocityX*24*3600;
+    moonY = moonY+moonVelocityY*24*3600;
 
     sunEarthDistance = Math.sqrt(earthX*earthX+earthY*earthY);
     sunMoonDistance = Math.sqrt(moonX*moonX+moonY*moonY);
@@ -1546,31 +1546,11 @@ NPEngine.Kepler.prototype.render = function (context) {
 };
 
 NPEngine.Kepler.prototype.setVariables = function(options) {
-//  options = options || {};
-//
-//  // exception
-//  if (options.speed !== undefined) {
-//    options.speed = options.speed < 0 ? 0 : options.speed;
-//    options.speed = options.speed > 10 ? 10 : options.speed;
-//  }
-//
-//  // init variables
-//  var speed = options.speed !== undefined ? options.speed : 5;
-//  this.augmentedFactor = options.augmentedFactor !== undefined ? options.augmentedFactor : 30;
-//  this.dampingFactor = options.dampingFactor !== undefined ? options.dampingFactor : 1;
-//
-//  this.slowFactor = 10 - speed;
-//  this.earthVelocityY = this.earthFarVelocity/1.50e+11*this.dampingFactor;
-//  this.moonVelocityY = this.earthVelocityY+1018.326257/1.50E+11;
-
-
   options = options || {};
-
-  this.deltaTime = 0.01;   // seconds
 
   // exception
   if (options.speed !== undefined) {
-    options.speed = options.speed < 1 ? 1 : options.speed;
+    options.speed = options.speed < 0 ? 0 : options.speed;
     options.speed = options.speed > 10 ? 10 : options.speed;
   }
 
@@ -1579,24 +1559,9 @@ NPEngine.Kepler.prototype.setVariables = function(options) {
   this.augmentedFactor = options.augmentedFactor !== undefined ? options.augmentedFactor : 30;
   this.dampingFactor = options.dampingFactor !== undefined ? options.dampingFactor : 1;
 
-
   this.slowFactor = 10 - speed;
-
-  this.G = 1.18e-19;
-  this.earthMass = 1;
-  this.sunMass = 332965;
-  this.moonMass = 0.012321;
-
-  this.earthFarVelocity = 29304.64558;    // m/s
-
-  this.earthVelocityX = 0;
   this.earthVelocityY = this.earthFarVelocity/1.50e+11*this.dampingFactor;
-  this.earthX = 1.013333;
-  this.earthY = 0;
-  this.moonVelocityX = 0;
   this.moonVelocityY = this.earthVelocityY+1018.326257/1.50E+11;
-  this.moonX = 1.015896;
-  this.moonY = 0;
 };
 NPEngine.ParabolicMotion = function(options) {
   NPEngine.DisplayObject.call(this);
