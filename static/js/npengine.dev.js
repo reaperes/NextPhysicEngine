@@ -35,13 +35,15 @@ NPEngine = function(canvas) {
   };
   window.addEventListener("keypress", this.keyHandler, false);
 
-  var clickHandler = function(e) {
+  var flag = 0;
+  canvas.addEventListener("mousedown", function(e) {
     if (that.state == 'create' || that.state == 'init' || that.state == 'destroy') {
       return ;
     }
 
     if (that.state=='ready') {
-      that.start();
+      flag = 0;
+//      that.start();
     }
     else if (that.state=='resume') {
       that.pause();
@@ -49,15 +51,35 @@ NPEngine = function(canvas) {
     else if (that.state=='pause') {
       that.resume();
     }
-  };
-  canvas.addEventListener('click', clickHandler, false);
+  }, false);
+  canvas.addEventListener("mousemove", function(e) {
+    if (that.state=='ready') {
+      flag = 1;
+    }
+  }, false);
+  canvas.addEventListener("mouseup", function(e) {
+    if (that.state != 'ready') {
+      return ;
+    }
+    if(flag == 0) {
+      console.log("click");
+      if (that.mouseListener != undefined) {
+        that.mouseListener.call(this, e);
+      }
+    }
+    else if(flag == 1) {
+      console.log("drag");
+    }
+  }, false);
 
   this.init(canvas);
 };
 
 NPEngine.prototype.constructor = NPEngine;
 
-
+NPEngine.prototype.setMouseListener = function(func) {
+  this.mouseListener = func;
+};
 
 NPEngine.prototype.init = function(canvas) {
   this.renderer = new NPEngine.CanvasRenderer(canvas);
@@ -558,6 +580,14 @@ NPEngine.Grid.prototype.convertToVectorValueX = function(x) {
 
 NPEngine.Grid.prototype.convertToVectorValueY = function(y) {
   return this.centerHeight + y * -100;
+};
+
+NPEngine.Grid.prototype.revertToVectorValueX = function(x) {
+  return (x-this.centerWidth) / 100;
+};
+
+NPEngine.Grid.prototype.revertToVectorValueY = function(y) {
+  return (y - this.centerHeight) / -100;
 };
 
 NPEngine.Grid.prototype.convertToGridScalaValue = function(value) {
@@ -1159,6 +1189,11 @@ NPEngine.Collision2d.prototype.onPause = function() {
 NPEngine.Collision2d.prototype.onStop = function() {
 };
 
+NPEngine.Collision2d.prototype.onClickEvent = function(e) {
+  var x = e.pageX;
+  var y = e.pageY;
+};
+
 NPEngine.Collision2d.prototype.update = function () {
   var gap = Math.round((new Date().getTime()-this.timeBoard.then)/1); // convert millisecond to 0.01 second
 
@@ -1213,22 +1248,22 @@ NPEngine.Collision2d.prototype.setVariables = function (options) {
   options = options || {};
 
   // initial variables
-  this.k = options.k !== undefined ? options.k : 10000;             // N/m
-  this.mu = options.mu !== undefined ? options.mu : 0;              // N s/m
-  this.mass1 = options.mass1 !== undefined ? options.mass1 : 2;     // kg
-  this.mass2 = options.mass2 !== undefined ? options.mass2 : 2;     // kg
+  this.k = options.k !== undefined ? options.k : this.k;             // N/m
+  this.mu = options.mu !== undefined ? options.mu : this.mu;              // N s/m
+  this.mass1 = options.mass1 !== undefined ? options.mass1 : this.mass1;     // kg
+  this.mass2 = options.mass2 !== undefined ? options.mass2 : this.mass2;     // kg
 
-  var ball1X = options.ball1X !== undefined ? options.ball1X : -3;  // m
-  var ball1Y = options.ball1Y !== undefined ? options.ball1Y : 0.5; // m
-  this.diameter1 = options.diameter1 !== undefined ? options.diameter1 : 0.4;         // m
-  this.velocity1_x = options.velocity1_x !== undefined ? options.velocity1_x : 3;     // m/s
-  this.velocity1_y = options.velocity1_y !== undefined ? options.velocity1_y : 0;     // m/s
+  var ball1X = options.ball1X !== undefined ? options.ball1X : this.ball1.x;  // m
+  var ball1Y = options.ball1Y !== undefined ? options.ball1Y : this.ball1.y; // m
+  this.diameter1 = options.diameter1 !== undefined ? options.diameter1 : this.diameter1;         // m
+  this.velocity1_x = options.velocity1_x !== undefined ? options.velocity1_x : this.velocity1_x;     // m/s
+  this.velocity1_y = options.velocity1_y !== undefined ? options.velocity1_y : this.velocity1_y;     // m/s
 
-  var ball2X = options.ball2X !== undefined ? options.ball2X : 1;  // m
-  var ball2Y = options.ball2Y !== undefined ? options.ball2Y : 0; // m
-  this.diameter2 = options.diameter2 !== undefined ? options.diameter2 : 0.4;         // m
-  this.velocity2_x = options.velocity2_x !== undefined ? options.velocity2_x : 0;     // m/s
-  this.velocity2_y = options.velocity2_y !== undefined ? options.velocity2_y : 0;     // m/s
+  var ball2X = options.ball2X !== undefined ? options.ball2X : this.ball2.x;  // m
+  var ball2Y = options.ball2Y !== undefined ? options.ball2Y : this.ball2.y; // m
+  this.diameter2 = options.diameter2 !== undefined ? options.diameter2 : this.diameter2;         // m
+  this.velocity2_x = options.velocity2_x !== undefined ? options.velocity2_x : this.velocity2_x;     // m/s
+  this.velocity2_y = options.velocity2_y !== undefined ? options.velocity2_y : this.velocity2_y;     // m/s
 
   // other variables
   this.ball1 = new NPEngine.Point(ball1X, ball1Y);
@@ -1363,7 +1398,8 @@ NPEngine.ForcedSpring.prototype.setVariables = function(options) {
 
   this.angularVelocity0 = Math.sqrt(this.k/this.mass);
   this.angularVelocity = this.angularVelocity0*this.frequency;
-}
+};
+
 NPEngine.Kepler = function(options) {
   NPEngine.DisplayObject.call(this);
 
@@ -2850,6 +2886,16 @@ NPEngine.CanvasRenderer.prototype.onEngineStop = function() {
 };
 
 NPEngine.CanvasRenderer.prototype.onEngineDestroy = function() {
+};
+
+NPEngine.CanvasRenderer.prototype.onClickEvent = function(e) {
+  for (var i=0, length=this.children.length; i<length; i++) {
+    if (this.children[i].onClickEvent != undefined) {
+        e.pageX -= this.view.offsetLeft;
+        e.pageY -= this.view.offsetTop;
+        this.children[i].onClickEvent.call(this.children[i], e);
+    }
+  }
 };
 
 NPEngine.CanvasRenderer.prototype.addChild = function (displayObject) {

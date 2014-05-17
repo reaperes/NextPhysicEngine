@@ -26,11 +26,23 @@
     engine.addDisplayObject(collision);
     engine.ready();
 
+    engine.setMouseListener(function (e) {
+      debugger;
+      engine.stop();
+      value.ball1X = collision.grid.revertToVectorValueX(e.pageX);
+      value.ball1Y = collision.grid.revertToVectorValueY(e.pageY);
+      collision.setVariables({
+        ball1X: collision.grid.revertToVectorValueX(e.pageX),
+        ball1Y: collision.grid.revertToVectorValueY(e.pageY)
+      });
+      engine.ready();
+    });
+
     // default value
     var DefaultValue = function () {
       this.mu = 10;
       this.mass1 = 2;
-      this.ball1X = -3;
+      this.ball1X = -3.0;
       this.ball1Y = 0.5;
       this.velocity1_x = 3;
       this.velocity1_y = 0;
@@ -41,8 +53,10 @@
       this.velocity2_y = 0;
     };
 
+    var value;
     window.onload = function () {
       var defaultValue = new DefaultValue();
+      value = defaultValue;
       var gui = new dat.GUI({autoPlace: false});
       document.getElementById('gui-container').appendChild(gui.domElement);
 
@@ -67,9 +81,8 @@
       setController(ball2Folder, 'velocity2_y');
 
       function setController(guiFolder, variable, list) {
-        var gui = guiFolder.add(defaultValue, variable, list);
+        var gui = guiFolder.add(defaultValue, variable, list).listen();
         gui.onFinishChange(function (value) {
-          debugger;
           var option = {};
           option[variable.toString()] = value;
 
