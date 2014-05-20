@@ -40,11 +40,11 @@
       setController(massFolder, 'mass');
 
       var thetaFolder = gui.addFolder('입사 각도');
-      thetaFolder.close();
+      thetaFolder.open();
       setController(thetaFolder, 'theta');
 
       var velocityFolder = gui.addFolder('입사 속도');
-      velocityFolder.close();
+      velocityFolder.open();
       setController(velocityFolder, 'velocity');
 
       function setController(guiFolder, variable) {
