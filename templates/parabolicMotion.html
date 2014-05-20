@@ -27,7 +27,36 @@
     };
 
     window.onload = function () {
-      ㅈ
+      var defaultValue = new DefaultValue();
+      var gui = new dat.GUI({autoPlace: false});
+      document.getElementById('gui-container').appendChild(gui.domElement);
+
+      var muFolder = gui.addFolder('마찰 계수');
+      muFolder.open();
+      setController(muFolder, 'mu');
+
+      var massFolder = gui.addFolder('질량 (kg)');
+      massFolder.open();
+      setController(massFolder, 'mass');
+
+      var thetaFolder = gui.addFolder('입사 각도');
+      thetaFolder.close();
+      setController(thetaFolder, 'theta');
+
+      var velocityFolder = gui.addFolder('입사 속도');
+      velocityFolder.close();
+      setController(velocityFolder, 'velocity');
+
+      function setController(guiFolder, variable) {
+        var gui = guiFolder.add(defaultValue, variable);
+        gui.onFinishChange(function (value) {
+            var option = {};
+            option[variable.toString()] = value;
+            engine.stop();
+            motion.setVariables(option);
+            engine.ready();
+        });
+      }
     };
   </script>
 {% endblock %}
