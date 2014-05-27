@@ -1387,14 +1387,14 @@ NPEngine.ForcedSpring.prototype.render = function (context) {
 NPEngine.ForcedSpring.prototype.setVariables = function(options) {
   options = options || {};
 
-  this.k = options.k !== undefined ? options.k : 100;             // N/m
-  this.mu = options.mu !== undefined ? options.mu : 0;            // N s/m
+  this.k = options.k !== undefined ? options.k : this.k;             // N/m
+  this.mu = options.mu !== undefined ? options.mu : this.mu;            // N s/m
 
-  this.mass = options.mass !== undefined ? options.mass : 2;      // kg
-  this.block.center.x = options.blockX0 !== undefined ? options.blockX0 : 0.1; // m
-  this.f0 = options.f0 !== undefined ? options.f0 : 20;           // N
-  this.frequency = options.ww0 !== undefined ? options.ww0 : 0.5;       // w / w0
-  this.phase = options.phase !== undefined ? options.phase : 3.141592;  // rad
+  this.mass = options.mass !== undefined ? options.mass : this.mass;      // kg
+  this.block.center.x = options.blockX0 !== undefined ? options.blockX0 : this.block.center.x; // m
+  this.f0 = options.f0 !== undefined ? options.f0 : this.f0;           // N
+  this.frequency = options.ww0 !== undefined ? options.ww0 : this.frequency;       // w / w0
+  this.phase = options.phase !== undefined ? options.phase : this.phase;  // rad
 
   this.angularVelocity0 = Math.sqrt(this.k/this.mass);
   this.angularVelocity = this.angularVelocity0*this.frequency;
@@ -1591,11 +1591,13 @@ NPEngine.Kepler.prototype.setVariables = function(options) {
   }
 
   // init variables
-  var speed = options.speed !== undefined ? options.speed : 5;
-  this.augmentedFactor = options.augmentedFactor !== undefined ? options.augmentedFactor : 30;
-  this.dampingFactor = options.dampingFactor !== undefined ? options.dampingFactor : 1;
+  if (options.speed !== undefined) {
+    this.slowFactor = 10 - options.speed;
+  }
 
-  this.slowFactor = 10 - speed;
+  this.augmentedFactor = options.augmentedFactor !== undefined ? options.augmentedFactor : this.augmentedFactor;
+  this.dampingFactor = options.dampingFactor !== undefined ? options.dampingFactor : this.dampingFactor;
+
   this.earthVelocityY = this.earthFarVelocity/1.50e+11*this.dampingFactor;
   this.moonVelocityY = this.earthVelocityY+1018.326257/1.50E+11;
 };
@@ -1736,11 +1738,11 @@ NPEngine.ParabolicMotion.prototype.setVariables = function (options) {
   options = options || {};
 
   // initial variables
-  this.gravity = options.gravity !== undefined ? options.gravity : 9.8;   // m/s^2
-  this.mu = options.mu !== undefined ? options.mu : 0;                    // friction constant
-  this.mass = options.mass !== undefined ? options.mass : 1;              // kg
-  this.theta = options.theta !== undefined ? NPEngine.Convert.toRadians(options.theta) : 0.785398;   // rad
-  this.velocity = options.velocity !== undefined ? options.velocity : 60;                            // m/s
+  this.gravity = options.gravity !== undefined ? options.gravity : this.gravity;   // m/s^2
+  this.mu = options.mu !== undefined ? options.mu : this.mu;                    // friction constant
+  this.mass = options.mass !== undefined ? options.mass : this.mass;              // kg
+  this.theta = options.theta !== undefined ? NPEngine.Convert.toRadians(options.theta) : this.theta;   // rad
+  this.velocity = options.velocity !== undefined ? options.velocity : this.velocity;                            // m/s
 };
 
 NPEngine.Pendulum = function (options) {
@@ -1877,7 +1879,7 @@ NPEngine.Pendulum.prototype.setVariables = function (options) {
   this.mass = options.mass !== undefined ? options.mass : this.mass;
   this.lineLength = options.lineLength !== undefined ? options.lineLength : this.lineLength;
   this.gravity = options.gravity !== undefined ? options. gravity : this.gravity;
-  this.theta0 = options.theta0 !== undefined ? NPEngine.Convert.toRadians(options.theta0) : NPEngine.Convert.toRadians(this.theta0);
+  this.theta0 = options.theta0 !== undefined ? NPEngine.Convert.toRadians(options.theta0) : this.theta0;
 };
 NPEngine.PendulumCollision = function(options) {
   NPEngine.DisplayObject.call(this);
@@ -2033,10 +2035,10 @@ NPEngine.PendulumCollision.prototype.setVariables = function (options) {
   options = options || {};
 
   // initial variables
-  this.k = options.k !== undefined ? options.k : 1000000;    // N/m
-  this.mu = options.mu !== undefined ? options.mu : 10;      // N s/m
-  this.theta1 = options.theta1 !== undefined ? NPEngine.Convert.toRadians(options.theta1) : 0;    // rad
-  this.theta2 = options.theta2 !== undefined ? NPEngine.Convert.toRadians(options.theta2) : NPEngine.Convert.toRadians(45);   // rad
+  this.k = options.k !== undefined ? options.k : this.k;    // N/m
+  this.mu = options.mu !== undefined ? options.mu : this.mu;      // N s/m
+  this.theta1 = options.theta1 !== undefined ? NPEngine.Convert.toRadians(options.theta1) : this.theta1;    // rad
+  this.theta2 = options.theta2 !== undefined ? NPEngine.Convert.toRadians(options.theta2) : this.theta2;   // rad
 };
 NPEngine.PendulumCollisionPlus = function(options) {
   NPEngine.DisplayObject.call(this);
@@ -2269,13 +2271,13 @@ NPEngine.PendulumCollisionPlus.prototype.setVariables = function (options) {
   options.num !== undefined && options.num < 3 ? options.num = 3 : options.num;
 
   // initial variables
-  this.num = options.num !== undefined ? options.num : 4;      // number
-  this.k = options.k !== undefined ? options.k : 10000000;     // N/m
-  this.mu = options.mu !== undefined ? options.mu : 0;         // N s/m
+  this.num = options.num !== undefined ? options.num : this.num;      // number
+  this.k = options.k !== undefined ? options.k : this.k;     // N/m
+  this.mu = options.mu !== undefined ? options.mu : this.mu;         // N s/m
 
   this.theta = [];
   for (var i = 1; i <= this.num; i++) {
-    this['theta'+i] = options['theta'+i] !== undefined ? NPEngine.Convert.toRadians(options['theta'+i]) : 0;
+    this['theta'+i] = options['theta'+i] !== undefined ? NPEngine.Convert.toRadians(options['theta'+i]) : this['theta'+i];
   }
 };
 NPEngine.RotationMotion = function(options) {
@@ -2442,15 +2444,17 @@ NPEngine.RotationMotion.prototype.setVariables = function (options) {
 
   options = options || {};
 
-  this.k = options.k !== undefined ? options.k : 200000;            // N/m
+  this.k = options.k !== undefined ? options.k : this.k;            // N/m
 
-  this.ballMass = options.ballMass !== undefined ? options.ballMass : 1.1;          // kg
-  this.ballRadius = options.ballRadius !== undefined ? options.ballRadius : 0.1;    // m
-  var ballVelocity = options.ballVelocity !== undefined ? options.ballVelocity : 3; // m/s
+  this.ballMass = options.ballMass !== undefined ? options.ballMass : this.ballMass;          // kg
+  this.ballRadius = options.ballRadius !== undefined ? options.ballRadius : this.ballRadius;    // m
+  if (options.ballVelocity !== undefined) {
+    this.ballVelocityX = -options.ballVelocity;
+  }
 
-  this.blockMass = options.blockMass !== undefined ? options.blockMass : 15;        // kg
-  this.blockWidth = options.blockWidth !== undefined ? options.blockWidth : 0.3;    // m
-  this.blockHeight = options.blockHeight !== undefined ? options.blockHeight : 1;   // m
+  this.blockMass = options.blockMass !== undefined ? options.blockMass : this.blockMass;        // kg
+  this.blockWidth = options.blockWidth !== undefined ? options.blockWidth : this.blockWidth;    // m
+  this.blockHeight = options.blockHeight !== undefined ? options.blockHeight : this.blockHeight;   // m
 
   this.blockDiagonalHeight = Math.sqrt(this.blockWidth*this.blockWidth+this.blockHeight*this.blockHeight);
   this.momentOfInertia = 1/3*this.blockMass*this.blockHeight*this.blockHeight;
@@ -2459,7 +2463,6 @@ NPEngine.RotationMotion.prototype.setVariables = function (options) {
   this.block = new NPEngine.Point(0, this.blockHeight);
   this.blockCollisionPoint = new NPEngine.Point(this.blockWidth, this.blockHeight);
   this.ball = new NPEngine.Point(3, this.blockHeight);
-  this.ballVelocityX = -ballVelocity;   // m/s
 
   this.curBall = this.ball.clone();
   this.curBlock = this.block.clone();
@@ -2686,15 +2689,15 @@ NPEngine.RotationMotionPlus.prototype.setVariables = function(options) {
 
   this.k = options.k !== undefined ? options.k : 1000000;            // N/m
 
-  this.ballMass = options.ballMass !== undefined ? options.ballMass : 1.1;          // kg
-  this.ballRadius = options.ballRadius !== undefined ? options.ballRadius : 0.1;    // m
-  this.ballX = options.ballX !== undefined ? options.ballX : 8;                     // m
-  this.incidenceAngle = options.ballAngle !== undefined ? NPEngine.Convert.toRadians(options.ballAngle) : NPEngine.Convert.toRadians(40);     // rad
-  this.incidenceVelocity = options.ballVelocity !== undefined ? options.ballVelocity : 10;   // m/s
+  this.ballMass = options.ballMass !== undefined ? options.ballMass : this.ballMass;          // kg
+  this.ballRadius = options.ballRadius !== undefined ? options.ballRadius : this.ballRadius;    // m
+  this.ballX = options.ballX !== undefined ? options.ballX : this.ballX;                     // m
+  this.incidenceAngle = options.ballAngle !== undefined ? NPEngine.Convert.toRadians(options.ballAngle) : this.incidenceAngle;     // rad
+  this.incidenceVelocity = options.ballVelocity !== undefined ? options.ballVelocity : this.incidenceVelocity;   // m/s
 
-  this.blockMass = options.blockMass !== undefined ? options.blockMass : 50;        // kg
-  this.blockWidth = options.blockWidth !== undefined ? options.blockWidth : 0.3;    // m
-  this.blockHeight = options.blockHeight !== undefined ? options.blockHeight : 2;   // m
+  this.blockMass = options.blockMass !== undefined ? options.blockMass : this.blockMass;        // kg
+  this.blockWidth = options.blockWidth !== undefined ? options.blockWidth : this.blockWidth;    // m
+  this.blockHeight = options.blockHeight !== undefined ? options.blockHeight : this.blockHeight;   // m
 
   this.blockDiagonalHeight = Math.sqrt(this.blockWidth*this.blockWidth+this.blockHeight*this.blockHeight);
 
@@ -2817,9 +2820,9 @@ NPEngine.Spring.prototype.render = function (context) {
 NPEngine.Spring.prototype.setVariables = function (options) {
   options = options || {};
 
-  this.mass = options.mass !== undefined ? options.mass : 2;  // kg
-  this.k = options.k !== undefined ? options.k : 100;         // N/m
-  this.mu = options.mu !== undefined ? options.mu : 0;        // N s/m
+  this.mass = options.mass !== undefined ? options.mass : this.mass;  // kg
+  this.k = options.k !== undefined ? options.k : this.k;         // N/m
+  this.mu = options.mu !== undefined ? options.mu : this.mu;        // N s/m
 };
 
 NPEngine.CanvasRenderer = function (canvas) {
