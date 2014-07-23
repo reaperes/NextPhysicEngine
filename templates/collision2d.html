@@ -81,7 +81,7 @@
       setController(ball2Folder, 'velocity2_y');
 
       function setController(guiFolder, variable, list) {
-        var gui = guiFolder.add(defaultValue, variable, list).listen();
+        var gui = guiFolder.add(defaultValue, variable, list);
         gui.onFinishChange(function (value) {
           var option = {};
           option[variable.toString()] = value;

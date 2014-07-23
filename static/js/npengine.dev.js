@@ -16,6 +16,7 @@ NPEngine = function(canvas) {
 
   var that = this;
   this.keyHandler = function(e) {
+    console.log(e.keyCode);
     if (e.keyCode != 13) {
       return ;
     }
@@ -62,13 +63,11 @@ NPEngine = function(canvas) {
       return ;
     }
     if(flag == 0) {
-      console.log("click");
       if (that.mouseListener != undefined) {
         that.mouseListener.call(this, e);
       }
     }
     else if(flag == 1) {
-      console.log("drag");
     }
   }, false);
 
@@ -1269,6 +1268,7 @@ NPEngine.Collision2d.prototype.setVariables = function (options) {
   this.ball1 = new NPEngine.Point(ball1X, ball1Y);
   this.ball2 = new NPEngine.Point(ball2X, ball2Y);
 };
+
 NPEngine.ForcedSpring = function (options) {
   NPEngine.DisplayObject.call(this);
 
@@ -2044,7 +2044,7 @@ NPEngine.PendulumCollisionPlus = function(options) {
   NPEngine.DisplayObject.call(this);
 
   options = options || {};
-  
+
   // final variables
   this.deltaTime        = 0.00001;     // second
 
