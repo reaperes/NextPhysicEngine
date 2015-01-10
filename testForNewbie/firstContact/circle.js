@@ -23,7 +23,7 @@ FCEngine.Circle = function(Vx, Vy, theta, radius, mess, pendulem){
     this.distance = 0;
 };
 
-FCEngine.Pendulem = function(x, y, radius){
+FCEngine.Pendulum = function(x, y, radius){
     this.m_posX = x;
     this.m_posY = y;
     this.m_radius = radius;
@@ -110,7 +110,7 @@ FCEngine.CircleWorld.prototype.render = function(){
 
 
 
-var pendul = new FCEngine.Pendulem(500, 0, 400);
+var pendul = new FCEngine.Pendulum(500, 0, 400);
 var circle1 = new FCEngine.Circle(0, 0, (30/180)*Math.PI, 50, 5, pendul);
 var circle2 = new FCEngine.Circle(10, 0, (0/180)*Math.PI, 50, 5, pendul);
 var World = new FCEngine.CircleWorld;

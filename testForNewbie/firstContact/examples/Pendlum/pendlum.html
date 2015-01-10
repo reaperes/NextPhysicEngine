@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Next PhysicsEngine (mini) - Pendulum</title>
+    <script type="text/javascript" src="../../lib/three-r68.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="../../lib/stats.min.js"></script>
+    <script type="text/javascript" src="../../lib/TrackballControls.js"></script>
+    <script type="text/javascript" src="../../bin/nextphysics.dev.js"></script>
+    <!--Bootstrap-->
+    <link href="../../lib/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../lib/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="canvas-container" style="position:fixed;top:0;left:0;width:100%;height:100%;"></div>
+<div id="debugTool" style="position:fixed;top:100px;left:20px">
+    <span id="debug" style="font-size:22px">hello</span>
+</div>
+<script type="text/javascript" src="circle.js"></script>
+<script type="text/javascript">
+
+    var physics = new NextPhysics(document.getElementById('canvas-container'));
+    physics.setCameraPosition(0, 100, 300);
+    var pendulem = new NP.Pendulum(-50, 6.955, 0, 100, 0, 50);
+    var gravity = new NP.Force(0, -0.098 , 0);
+    //업데이트시간을 조절한다. 시간 단위 m 단위 mks
+    //피직스 엔진은 5ms 로 계산하도
+    //fpsej dpswlsdms 16
+
+    gravity.update = function(){};
+    var tension = new NP.Force(0, 0, 0);
+    tension.origin = new THREE.Vector3(0,100,0);
+    tension.object = pendulem;
+    tension.elect = 0.5;
+    tension.radius = 50;
+
+    tension.update = function(){
+        var distance = Math.sqrt(Math.pow(this.origin.x - this.object.position.x, 2) + Math.pow(this.origin.y - this.object.position.y, 2) +
+        Math.pow(this.origin.z - this.object.position.z, 2));
+        if(distance > this.radius){
+            var forceScala = this.elect * (distance - this.radius);
+            var unit = forceScala / distance;
+            this.x = (this.origin.x - this.object.position.x) * unit;
+            this.y = (this.origin.y - this.object.position.y) * unit;
+            this.z = (this.origin.z - this.object.position.z) * unit;
+        }
+        else{
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+        }
+    };
+
+    pendulem.applyForce(gravity);
+    pendulem.applyForce(tension);
+    physics.add( pendulem);
+    physics.start();
+
+</script>
+</body>
+</html>

@@ -1,23 +1,52 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-  // Project configuration.
+  var srcFiles = [
+    'src/nextphysics/intro.js',
+    'src/nextphysics/util/*.js',
+    'src/nextphysics/NextPhysics.js',
+    'src/nextphysics/npengine/*.js',
+    'src/nextphysics/npengine/force/*.js',
+    'src/nextphysics/npobjects/core/*.js',
+    'src/nextphysics/npobjects/*.js',
+    'src/nextphysics/npobjects/sample/*.js',
+    'src/nextphysics/nprenderer/*.js',
+  ];
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
+
+    clean: {
       build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        src: ['bin/*']
+      }
+    },
+
+    concat: {
+      dist: {
+        src: srcFiles,
+        dest: 'bin/nextphysics.dev.js'
+      }
+    },
+
+    uglify: {
+      build: {
+        options: {
+          beautify: true
+        },
+        files: {
+          'bin/npengine.js': ['bin/nextphysics.dev.js']
+        }
       }
     }
   });
 
-  // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  // Default task(s).
-  grunt.registerTask('default', ['uglify']);
-
+  grunt.registerTask(
+      'build',
+      'Compiles all of the assets and copies the files to the build directory.',
+      ['clean', 'concat', 'uglify']
+  );
 };
